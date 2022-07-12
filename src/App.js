@@ -9,7 +9,7 @@ import Login from './components/login/Login'
 import {auth }from './Firebase';
 import { login,logout} from './features/userSlice'
 import Widgets from './components/widgets/Widgets';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
 
@@ -17,7 +17,6 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    const auth = getAuth();
     onAuthStateChanged(auth, (userAuth) => {
       if(userAuth){
         dispatch(login({

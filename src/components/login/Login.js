@@ -1,10 +1,9 @@
-import { NoEncryption } from '@mui/icons-material';
 import React,{useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from './Firebase';
+import { auth } from '../../Firebase';
 import './login.css'
-import {login} from './features/userSlice';
-import {  signInWithEmailAndPassword } from "firebase/auth";
+import {login} from '../../features/userSlice';
+import {  signInWithEmailAndPassword,createUserWithEmailAndPassword,updateProfile } from "firebase/auth";
 
 function Login() {
     const[email, setEmail]  = useState('')
@@ -23,7 +22,7 @@ function Login() {
                         {
                             email: userAuth.user.email,
                             uid: userAuth.user.uid,
-                            displayName: NoEncryption,
+                            displayName: name,
                             photoUrl: profileUrl
                         }
                     )
@@ -37,7 +36,7 @@ function Login() {
         }
         createUserWithEmailAndPassword(auth,email,password)
         .then((userAuth) => {
-            userAuth.user.updateProfile({
+            updateProfile(userAuth.user,{
                 displayName: name,
                 photoUrl: profileUrl
             })
@@ -45,7 +44,7 @@ function Login() {
                 dispatch(login({
                     email: userAuth.user.email,
                     uid: userAuth.user.uid,
-                    displayName: NoEncryption,
+                    displayName: name,
                     photoUrl: profileUrl
                 }))
             })

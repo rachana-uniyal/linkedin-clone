@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import './header.css';
-import HeaderOption from './HeaderOption';
+import HeaderOption from '../headeroption/HeaderOption';
 
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -9,15 +9,14 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { auth } from './Firebase';
-import {logout } from './features/userSlice'
+import { auth } from '../../Firebase';
+import {logout } from '../../features/userSlice'
 
 function Header() {
     const dispatch = useDispatch();
 
     const logouOfApp = ()=>{
         dispatch(logout());
-        console.log("loggng out")
         auth.signOut()
     }
     return (
