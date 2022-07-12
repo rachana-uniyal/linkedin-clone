@@ -2,13 +2,14 @@ import React,{useEffect} from 'react';
 import {useSelector, useDispatch } from 'react-redux'
 import './App.css';
 import { selectUser } from './features/userSlice';
-import Feed from './Feed';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Login from './Login'
+import Feed from './components/feed/Feed';
+import Header from './components/header/Header';
+import Sidebar from './components/sidebar/Sidebar';
+import Login from './components/login/Login'
 import {auth }from './Firebase';
 import { login,logout} from './features/userSlice'
-import Widgets from './Widgets';
+import Widgets from './components/widgets/Widgets';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
 
@@ -16,7 +17,8 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    auth.onAuthStateChanged( userAuth =>{
+    const auth = getAuth();
+    onAuthStateChanged(auth, (userAuth) => {
       if(userAuth){
         dispatch(login({
           email:userAuth.email,

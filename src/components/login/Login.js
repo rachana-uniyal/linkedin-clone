@@ -3,19 +3,20 @@ import React,{useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { auth } from './Firebase';
 import './login.css'
-import {login} from './features/userSlice'
+import {login} from './features/userSlice';
+import {  signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
     const[email, setEmail]  = useState('')
     const[password, setPassword]  = useState('')
     const[name, setName]  = useState('')
     const [profileUrl, setProfileUrl] = useState('')
-    const dispatch = useDispatch
+    const dispatch = useDispatch()
 
     const loginToApp = (e)=>{
         e.preventDefault()
         
-        auth.signInWithEmailAndPassword(email,password).then(
+        signInWithEmailAndPassword(auth,email,password).then(
             (userAuth) =>{
                 dispatch(
                     login(
@@ -34,7 +35,7 @@ function Login() {
         if(!name){
             return alert("Please enter a full name!");
         }
-        auth.createUserWithEmailAndPassword(email,password)
+        createUserWithEmailAndPassword(auth,email,password)
         .then((userAuth) => {
             userAuth.user.updateProfile({
                 displayName: name,

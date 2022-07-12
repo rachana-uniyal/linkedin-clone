@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import './feed.css'
 import InputOption from './InputOption';
-import Post from './Post'
+import Post from '../post/Post'
 
 import CreateIcon from '@mui/icons-material/Create';
 import ImageIcon from '@mui/icons-material/Image';
@@ -9,10 +9,11 @@ import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import CalendarViewDayIcon from '@mui/icons-material/CalendarViewDay';
 import { db } from './Firebase';
-import firebase from 'firebase/compat/app';
 import { selectUser } from './features/userSlice';
 import {useSelector} from 'react-redux';
 import FlipMove from 'react-flip-move';
+import { collection, query, orderBy, getDocs, addDoc,serverTimestamp } from "firebase/firestore";
+
 
 
 function Feed() {
@@ -21,10 +22,9 @@ function Feed() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-       db.collection("posts")
-       .orderBy('timestamp','desc')
-       .onSnapshot(snapshot =>{
-           setPosts(snapshot.docs.map(doc =>(
+        const querySnapshot = getDocs(query(collection(db,"post"), orderBy('timestamp','desc')))
+        querySnapshot.forEach(doc =>{
+           setPosts(doc.map(doc =>(
                {
                    id: doc.id,
                    data: doc.data()
@@ -35,12 +35,12 @@ function Feed() {
 
     const sendPost = e =>{
         e.preventDefault();
-        db.collection('posts').add({
+        addDoc(collection(db,'posts'),{
             name: user.displayName,
             description: user.email,
             message:input,
             photoUrl: user.photoUrl || '',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: serverTimestamp()
         })
         setInput('')
     }
